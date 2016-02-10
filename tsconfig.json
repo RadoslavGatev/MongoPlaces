@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "target": "es5",
+        "noImplicitAny": true,
+        "declaration": true,
+        "removeComments": true,
+        "outDir": "build",
+        "sourceMap": false
+    },
+    "files": [
+        "typings/tsd.d.ts",
+        "src/Application.ts"
+    ]
+}

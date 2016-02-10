@@ -1,0 +1,22 @@
+{
+  "name": "MongoPlaces",
+  "version": "1.0.0",
+  "description": "Small application which uses Google Api maps",
+  "author": "Radoslav Gatev",
+  "license": "ISC",
+  "scripts": {
+    "tsc": "tsc",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "start": "npm run build && node build/Application.js"
+  },
+  "devDependencies": {
+    "typescript": "1.7.5"
+  },
+  "dependencies": {
+    "express": "^4.13.4",
+    "express-handlebars": "^3.0.0",
+    "mongoose": "^4.4.3",
+    "stylus": "^0.53.0"
+  }
+}
