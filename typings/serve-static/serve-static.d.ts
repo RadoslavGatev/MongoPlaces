@@ -6,7 +6,7 @@
 /* =================== USAGE ===================
 
     import * as serveStatic from "serve-static";
-    app.use(serveStatic("public/ftp", {"main.handlebars": ["default.html", "default.htm"]}))
+    app.use(serveStatic("public/ftp", {"index": ["default.html", "default.htm"]}))
 
  =============================================== */
 

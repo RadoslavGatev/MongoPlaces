@@ -3,57 +3,42 @@
 import * as express from "express";
 import * as routes from "./routes/index";
 import * as maps from "./routes/maps";
+import * as account from "./routes/account";
+import * as session from "express-session";
+import config from "./Config";
+import * as mongoose from "mongoose";
+import * as handlebars from 'express-handlebars';
 
-
-let exphbs = require('express-handlebars');
+mongoose.connect(config.mongoConnection);
 
 let app = express();
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.engine('handlebars', handlebars({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
+
+app.use(session({
+    secret: config.sessionSecret
+}));
 
 app.use(express.static('public'));
 
-app.get("/", routes.index);
-app.get("/maps", maps.index);
+// use body parser so we can get info from POST and/or URL parameters
+let bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
+
+app.get("/login", account.loginIndex);
+app.post("/login", account.login);
+
+app.get("/logout", account.logout);
+
+var authenticatedRoutes = express.Router();
+authenticatedRoutes.use(account.verifySession);
+authenticatedRoutes.get("/", routes.index);
+authenticatedRoutes.get("/maps", maps.index);
+
+app.use("/", authenticatedRoutes);
 
 app.listen(3000, () => {
     console.log("Example app listening on port 3000!");
 });
-
-
-//import * as express from "express";
-//let express = require("express")
-//import * as routes from "./routes/main.handlebars";
-//import * as http from "http";
-//import * as path from "path";
-//
-//var app = express();
-//
-//// all environments
-//app.set("port", process.env.PORT || 3000);
-//app.set("views", path.join(__dirname, "views"));
-//app.set("view engine", "jade");
-//app.use(express.favicon());
-//app.use(express.logger("dev"));
-//app.use(express.json());
-//app.use(express.urlencoded());
-//app.use(express.methodOverride());
-//app.use(app.router);
-//
-//import stylus = require("stylus");
-//app.use(stylus.middleware(path.join(__dirname, "public")));
-//app.use(express.static(path.join(__dirname, "public")));
-//
-//// development only
-//if ("development" == app.get("env")) {
-//    app.use(express.errorHandler());
-//}
-//
-//app.get("/", routes.main.handlebars);
-//app.get("/about", routes.about);
-//app.get("/contact", routes.contact);
-//
-//http.createServer(app).listen(app.get("port"), function () {
-//    console.log("Express server listening on port " + app.get("port"));
-//});
-

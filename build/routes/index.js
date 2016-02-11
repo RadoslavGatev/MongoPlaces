@@ -1,6 +1,6 @@
 "use strict";
 function index(req, res) {
-    res.render('index', { layout: "main", body: "maraba" });
+    res.render('index', { layout: "main", test: "raboti" });
 }
 exports.index = index;
 function about(req, res) {

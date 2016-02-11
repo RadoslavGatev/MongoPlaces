@@ -14,9 +14,18 @@
     "typescript": "1.7.5"
   },
   "dependencies": {
+    "body-parser": "^1.15.0",
+    "client-sessions": "^0.7.0",
+    "cookies": "^0.5.1",
     "express": "^4.13.4",
     "express-handlebars": "^3.0.0",
+    "express-session": "^1.13.0",
+    "jsonwebtoken": "^5.5.4",
     "mongoose": "^4.4.3",
     "stylus": "^0.53.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RadoslavGatev/MongoPlaces.git"
   }
 }

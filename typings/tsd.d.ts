@@ -4,3 +4,5 @@
 /// <reference path="serve-static/serve-static.d.ts" />
 /// <reference path="mongoose/mongoose.d.ts" />
 /// <reference path="stylus/stylus.d.ts" />
+/// <reference path="express-session/express-session.d.ts" />
+/// <reference path="express-handlebars/express-handlebars.d.ts" />
