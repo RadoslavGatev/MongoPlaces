@@ -7,7 +7,7 @@ import * as account from "./routes/account";
 import * as session from "express-session";
 import config from "./Config";
 import * as mongoose from "mongoose";
-import * as handlebars from 'express-handlebars';
+import * as handlebars from "express-handlebars";
 
 mongoose.connect(config.mongoConnection);
 
@@ -26,13 +26,12 @@ let bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-
 app.get("/login", account.loginIndex);
 app.post("/login", account.login);
 
 app.get("/logout", account.logout);
 
-var authenticatedRoutes = express.Router();
+let authenticatedRoutes = express.Router();
 authenticatedRoutes.use(account.verifySession);
 authenticatedRoutes.get("/", routes.index);
 authenticatedRoutes.get("/maps", maps.index);
