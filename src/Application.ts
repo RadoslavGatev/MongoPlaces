@@ -1,13 +1,16 @@
 "use strict";
 
 import * as express from "express";
+import * as mongoose from "mongoose";
+
 import * as routes from "./routes/index";
 import * as maps from "./routes/maps";
 import * as account from "./routes/account";
+
 import * as session from "express-session";
-import config from "./Config";
-import * as mongoose from "mongoose";
 import * as handlebars from "express-handlebars";
+
+import config from "./Config";
 
 mongoose.connect(config.mongoConnection);
 

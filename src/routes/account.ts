@@ -1,10 +1,10 @@
 "use strict";
 
 import * as express from "express";
-import {NextFunction} from "express";
-import User from "../models/User";
 import * as crypto from "crypto";
+
 import config from "../Config";
+import User from "../models/User";
 
 // function setup(req:express.Request, res:express.Response) {
 //
@@ -24,7 +24,7 @@ import config from "../Config";
 //     });
 // }
 
-function verifySession(req: express.Request, res: express.Response, next: NextFunction) {
+function verifySession(req: express.Request, res: express.Response, next: express.NextFunction) {
     let userId = req.session["userId"];
 
     if (userId) {
@@ -66,7 +66,6 @@ function login(req: express.Request, res: express.Response) {
 }
 
 function logout(req: express.Request, res: express.Response) {
-
     req.session.destroy((err: any) => {
         if (err) {
             console.error("Error occured during session destroy.");
