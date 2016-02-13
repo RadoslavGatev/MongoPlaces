@@ -80,7 +80,7 @@ authenticatedRoutes.get("/places/info", places.getInformationalWindow);
 
 authenticatedRoutes.get("/places/byType", places.showByType);
 authenticatedRoutes.get("/places/nearestNeighbours", places.showNearestNeighbours);
-authenticatedRoutes.get("/places/showSimiliar", places.showSimiliar);
+authenticatedRoutes.get("/places/showSimilar", places.showSimilar);
 
 app.use("/", authenticatedRoutes);
 

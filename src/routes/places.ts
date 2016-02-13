@@ -123,7 +123,7 @@ function showAllPlaces(req:express.Request, res:express.Response) {
                 return;
             }
 
-            res.render("showAllPlaces", {places: places});
+            res.render("showAllPlaces", {places: places, heading: "All places"});
         }
     );
 }
@@ -136,7 +136,7 @@ function showByType(req:express.Request, res:express.Response) {
                 return;
             }
 
-            res.render("showAllPlaces", {places: places});
+            res.render("showAllPlaces", {places: places, heading: "All places of type " + type});
         }
     );
 }
@@ -168,7 +168,7 @@ function showNearestNeighbours(req:express.Request, res:express.Response) {
                         res.sendStatus(500);
                         return;
                     }
-                    res.render("showAllPlaces", {places: places});
+                    res.render("showAllPlaces", {places: places, heading: "5 places near to " + place.name});
                 });
             }
             else {
@@ -178,7 +178,7 @@ function showNearestNeighbours(req:express.Request, res:express.Response) {
     );
 }
 
-function showSimiliar(req:express.Request, res:express.Response) {
+function showSimilar(req:express.Request, res:express.Response) {
     let placeId = req.query.placeId;
     Place.findById(placeId, (error, place)=> {
             if (error) {
@@ -187,16 +187,16 @@ function showSimiliar(req:express.Request, res:express.Response) {
             }
 
             if (place != null) {
-                var similiarQuery = Place.find({type: place.type, priceCategory: place.priceCategory}, {location: true});
+                var similarQuery = Place.find({type: place.type, priceCategory: place.priceCategory}, {location: true});
 
-                similiarQuery.sort({userLikedCount: -1}).limit(10);
-                similiarQuery.exec((error, places)=> {
+                similarQuery.sort({userLikedCount: -1}).limit(10);
+                similarQuery.exec((error, places)=> {
                     if (error) {
                         res.sendStatus(500);
                         return;
                     }
 
-                    res.render("showAllPlaces", {places: places});
+                    res.render("showAllPlaces", {places: places, heading: "Places similar to " + place.name});
                 });
             } else {
                 res.sendStatus(404);
@@ -278,7 +278,7 @@ export {
     showAllPlaces,
     showByType,
     showNearestNeighbours,
-    showSimiliar,
+    showSimilar,
     getInformationalWindow,
     showMostLikedPlacesByType
 }
