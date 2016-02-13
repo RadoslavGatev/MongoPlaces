@@ -7,7 +7,7 @@ var placeSchema = new mongoose.Schema(
     {
         name: {type: String, required: true},
         location: {type: [Number], index: '2dsphere', required: true},
-        type: {type: Number, required: true},
+        type: {type: String, required: true},
         description: {type: String},
         workTimeInterval: {
             start: Number,
@@ -26,10 +26,10 @@ export interface IPlace extends mongoose.Document {
     type: string;
     description: String;
     workTimeInterval:{start: number, end: number},
-    rating: number,
-    priceCategory: PriceCategories,
+    rating?: number,
+    priceCategory?: PriceCategories,
     userLikedCount: number,
-    seatsCapacity: number;
+    seatsCapacity?: number;
     isLikedByUser: boolean;
 }
 

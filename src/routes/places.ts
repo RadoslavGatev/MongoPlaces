@@ -34,7 +34,7 @@ function addPost(req:express.Request, res:express.Response) {
     let place = new Place();
     place.name = req.body["name"];
     place.type = req.body["type"];
-    place.description = req.body["name"];
+    place.description = req.body["description"];
     place.location = req.body["location[]"];
     place.priceCategory = req.body["priceCategory"];
     place.workTimeInterval = {
@@ -180,14 +180,13 @@ function showNearestNeighbours(req:express.Request, res:express.Response) {
 
 function showSimiliar(req:express.Request, res:express.Response) {
     let placeId = req.query.placeId;
-    Place.findById(placeId, {location: true}, (error, place)=> {
+    Place.findById(placeId, (error, place)=> {
             if (error) {
                 res.sendStatus(500);
                 return;
             }
 
             if (place != null) {
-
                 var similiarQuery = Place.find({type: place.type, priceCategory: place.priceCategory}, {location: true});
 
                 similiarQuery.sort({userLikedCount: -1}).limit(10);
@@ -196,7 +195,7 @@ function showSimiliar(req:express.Request, res:express.Response) {
                         res.sendStatus(500);
                         return;
                     }
-
+                    
                     res.render("showAllPlaces", {places: places});
                 });
             } else {
@@ -226,7 +225,7 @@ function getInformationalWindow(req:express.Request, res:express.Response) {
                 res.sendStatus(500);
                 return;
             }
-            
+
             if (user.length != 0) {
                 place.isLikedByUser = true;
             }
