@@ -24,7 +24,7 @@ export interface IPlace extends mongoose.Document {
     name: string;
     location: number[];
     type: string;
-    description: String;
+    description: string;
     workTimeInterval:{start: number, end: number},
     rating?: number,
     priceCategory?: PriceCategories,

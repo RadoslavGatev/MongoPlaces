@@ -195,7 +195,7 @@ function showSimiliar(req:express.Request, res:express.Response) {
                         res.sendStatus(500);
                         return;
                     }
-                    
+
                     res.render("showAllPlaces", {places: places});
                 });
             } else {

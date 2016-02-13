@@ -1,15 +1,19 @@
 <form method="post" action="/places/add" id="add-new-place" role="form">
     <div class="form-group">
-        <label for="name">name</label><input id="name" type="text" name="name" class="form-control"/>
+        <label for="name">name</label>
+        <input id="name" type="text" name="name" class="form-control"
+               required="required"/>
     </div>
     <div class="form-group">
         <label for="type">
             Type
         </label>
-        <input id="type" name="type" type="text" class="form-control"/>
+        <input id="type" name="type" type="text" class="form-control" required="required"/>
     </div>
     <div class="form-group">
-        <label for="description">Description</label><textarea id="description" class="form-control"></textarea>
+        <label for="description">Description</label>
+        <textarea id="description" name="description"
+                  class="form-control"></textarea>
     </div>
     <div class="form-group">
         <div class="map"></div>
@@ -24,12 +28,12 @@
         <label for="rating">Rating</label><input type="text" name="rating" class="form-control"/>
     </div>
     <div class="form-group">
-        <label for="seatsCapacity">Seats</label><input type="text" name="seatsCapacity"  class="form-control"/>
+        <label for="seatsCapacity">Seats</label><input type="text" name="seatsCapacity" class="form-control"/>
     </div>
     <div class="form-group">
         <label for="priceCategory">Price Category</label>
         <select id="priceCategory" name="priceCategory" class="form-control">
-            <option>Select</option>
+            <option value>Select</option>
             {{#priceCategories}}
                 <option value="{{value}}">{{name}}</option>
             {{/priceCategories}}
@@ -79,6 +83,9 @@
             if (marker != null) {
                 var position = marker.getPosition();
                 formData.location = [position.lng(), position.lat()];
+            }
+            else {
+                alert("Please drop a pin.");
             }
 
             $.ajax({
