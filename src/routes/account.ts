@@ -1,16 +1,15 @@
 "use strict";
 
 import * as express from "express";
-import User from "../models/User";
-import {NextFunction} from "express";
-
 import * as crypto from "crypto";
+
 import config from "../Config";
+import User from "../models/User";
 
 // function setup(req:express.Request, res:express.Response) {
 //
 //     // create a sample user
-//     var nick = new User({
+//     let nick = new User({
 //         name: 'Nick Cerminara',
 //         password: 'password',
 //         // places: []
@@ -25,7 +24,7 @@ import config from "../Config";
 //     });
 // }
 
-function verifySession(req:express.Request, res:express.Response, next:NextFunction) {
+function verifySession(req:express.Request, res:express.Response, next:express.NextFunction) {
     let userId = req.session["userId"];
 
     if (userId) {
@@ -35,7 +34,6 @@ function verifySession(req:express.Request, res:express.Response, next:NextFunct
         res.redirect("/login");
     }
 }
-
 
 function loginIndex(req:express.Request, res:express.Response) {
     res.render('login');
@@ -67,12 +65,11 @@ function login(req:express.Request, res:express.Response) {
 }
 
 function logout(req:express.Request, res:express.Response) {
-
     req.session.destroy((err:any) => {
-        if(err){
+        if (err) {
             console.error("Error occured during session destroy.");
             res.redirect("/");
-        } else{
+        } else {
             res.redirect("/login");
         }
     });

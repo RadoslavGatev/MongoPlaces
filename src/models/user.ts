@@ -1,10 +1,9 @@
 "use strict";
 
-import * as mongoose from 'mongoose';
+import * as mongoose from "mongoose";
 import {Schema} from "mongoose";
 
-
-var userSchema = new mongoose.Schema(
+let userSchema = new mongoose.Schema(
     {
         email: Schema.Types.String,
         password: Schema.Types.String,

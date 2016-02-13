@@ -1,14 +1,17 @@
 "use strict";
 
 import * as express from "express";
+import * as mongoose from "mongoose";
+
 import * as routes from "./routes/index";
 import * as maps from "./routes/maps";
 import * as places from "./routes/places";
 import * as account from "./routes/account";
+
 import * as session from "express-session";
+import * as handlebars from "express-handlebars";
+
 import config from "./Config";
-import * as mongoose from "mongoose";
-import * as handlebars from 'express-handlebars';
 
 mongoose.connect(config.mongoConnection);
 
@@ -33,7 +36,6 @@ let bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-
 function logErrors(err:any, req:express.Request, res:express.Response, next:express.NextFunction) {
     console.error(err.stack);
     next(err);
@@ -48,13 +50,12 @@ function errorHandler(err:any, req:express.Request, res:express.Response, next:e
 
 app.use(errorHandler);
 
-
 app.get("/login", account.loginIndex);
 app.post("/login", account.login);
 
 app.get("/logout", account.logout);
 
-var authenticatedRoutes = express.Router();
+let authenticatedRoutes = express.Router();
 authenticatedRoutes.use(account.verifySession);
 authenticatedRoutes.get("/", places.index);
 authenticatedRoutes.get("/maps", maps.index);
