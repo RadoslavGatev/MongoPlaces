@@ -6,13 +6,17 @@ import {Schema} from "mongoose";
 
 var userSchema = new mongoose.Schema(
     {
-        name: Schema.Types.String,
+        email: Schema.Types.String,
         password: Schema.Types.String,
-        places: [Schema.Types.ObjectId]
+        places: {
+            type: [Schema.Types.ObjectId],
+            ref: 'Place'
+        }
     });
+userSchema.index({email: 1, password: 1});
 
 export interface IUser extends mongoose.Document {
-    name: string;
+    email: string;
     password: string;
     places: string[];
 }

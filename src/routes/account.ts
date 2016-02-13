@@ -42,16 +42,15 @@ function loginIndex(req:express.Request, res:express.Response) {
 }
 
 function login(req:express.Request, res:express.Response) {
-    let name = req.body.name;
+    let email = req.body.email;
     let password = req.body.password;
 
     const hash = crypto.createHmac('sha256', config.sessionSecret)
         .update(password)
         .digest("base64");
 
-    console.log(hash);
     User.findOne({
-        name: name,
+        email: email,
         password: hash
     }, (error, user) => {
         if (error) {

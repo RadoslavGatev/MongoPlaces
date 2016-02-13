@@ -1,0 +1,23 @@
+<ul class="nav nav-tabs">
+    <li role="presentation" class="active"><a href="#info" data-toggle="tab">Info</a></li>
+    <li role="presentation"><a href="#links" data-toggle="tab">Links</a></li>
+</ul>
+
+<div class="tab-content" style="min-height: 100px;">
+    <div id="info" class="tab-pane fade in active">
+        <h3>{{place.name}}</h3>
+        <p>{{place.description}}</p>
+
+        <span>Type: {{place.type}}</span>
+        <span>Working time: {{place.workTimeInterval.start}} - {{place.workTimeInterval.end}}</span>
+        <span>Rating:{{place.rating}}</span>
+        <span>Seats: {{place.placesCount}}</span>
+        <span>Likes: {{place.userLikedCount}}</span>
+    </div>
+
+    <div id="links" class="tab-pane fade in">
+        <a href="/places/byType?type={{place.type}}" target="_blank">View all places of this type</a>
+        <a href="/places/nearestNeighbours?placeId={{place._id}}" target="_blank">View all the 5 nearby places</a>
+
+    </div>
+</div>

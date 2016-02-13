@@ -1,3 +1,61 @@
-<h1>Bootstrap starter template</h1>
-<p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a
-    mostly barebones HTML document.</p>
+<div>
+    <h2>User's favourite places</h2>  <a href="/places/add" class="btn btn-info" role="button">Add new place</a>
+</div>
+<table>
+    <thead>
+    <th>
+        name
+    </th>
+    <th>
+        location
+    </th>
+    <th>
+        type
+    </th>
+    <th>
+        description
+    </th>
+    <th>
+        workTimeInterval
+    </th>
+    <th>
+        rating
+    </th>
+    <th>
+        userLikedCount
+    </th>
+    <th>
+        placesCount
+    </th>
+    </thead>
+    <tbody>
+    {{#places}}
+        <tr>
+            <td>
+                {{name}}
+            </td>
+            <td>
+                {{location}}
+            </td>
+            <td>
+                {{type}}
+            </td>
+            <td>
+                {{description}}
+            </td>
+            <td>
+                {{workTimeInterval.start}}-{{workTimeInterval.end}}
+            </td>
+            <td>
+                {{rating}}
+            </td>
+            <td>
+                {{userLikedCount}}
+            </td>
+            <td>
+                {{placesCount}}
+            </td>
+        </tr>
+    {{/places}}
+    </tbody>
+</table>

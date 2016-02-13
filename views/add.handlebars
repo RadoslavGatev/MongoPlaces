@@ -1,0 +1,85 @@
+<form method="post" action="/places/add" id="add-new-place">
+    <label for="name">name</label><input id="name" type="text" name="name"/><br/>
+    <label for="type">
+        Type
+    </label>
+    <select id="type" name="type">
+        <option value="0">Restaurant</option>
+        <option value="1">Fitness</option>
+    </select><br/>
+    <label for="description">Description</label><textarea id="description"></textarea><br/>
+    <div class="map"></div>
+    <label for="worktime-start">Working time </label><input type="text" name="workTimeInterval.start"/>
+    <label for="worktime-end">to </label><input type="text" name="workTimeInterval.end"/></br>
+    <label for="rating">Rating</label><input type="text" name="rating"/></br>
+    <label for="seatsCapacity">Places</label><input type="text" name="seatsCapacity"/></br>
+    <label for="priceCategory">Price Category</label>
+    <select id="priceCategory" name="priceCategory">
+        {{#priceCategories}}
+            <option value="{{value}}">{{name}}</option>
+        {{/priceCategories}}
+    </select>
+
+    <button type="submit" class="btn btn-default">Save</button>
+</form>
+
+
+<script>
+    var map = null;
+    var marker = null;
+    function initMap() {
+        map = new google.maps.Map($('.map')[0], {
+            center: {lat: -34.397, lng: 150.644},
+            zoom: 8
+        });
+
+        google.maps.event.addListenerOnce(map, 'click', function (event) {
+            addMarker(event.latLng, map);
+        });
+
+        // Adds a marker to the map.
+        function addMarker(location, map) {
+            // Add the marker at the clicked location, and add the next-available label
+            // from the array of alphabetical characters.
+            marker = new google.maps.Marker({
+                position: location,
+                map: map,
+                draggable: true
+            });
+        }
+
+    }
+    $(initMap);
+
+    $(function () {
+        $("#add-new-place").submit(function (e) {
+            e.preventDefault();
+
+            var formData = {};
+            $(this).serializeArray().map(function (x) {
+                formData[x.name] = x.value;
+            });
+
+            if (marker != null) {
+                var position = marker.getPosition();
+                formData.location = [position.lng(), position.lat()];
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/places/add",
+                data: formData,
+                success: function (data) {
+                    if (data.success === true) {
+                        window.location = "/";
+
+                    }
+                    else {
+                        alert("An error has occured!");
+                    }
+                },
+                dataType: "json"
+            });
+        });
+    });
+</script>
