@@ -15,12 +15,19 @@
                 <i class="fa fa-heart"></i>Liked
             </a>
         </h3>
-        <p>{{place.description}}</p>
-
-        <span>Type: {{place.type}}</span>
-        <span>Working time: {{place.workTimeInterval.start}} - {{place.workTimeInterval.end}}</span>
-        <span>Rating:{{place.rating}}</span>
-        <span>Seats: {{place.placesCount}}</span>
+        {{#if place.description}}
+            <p>{{place.description}}</p>
+        {{/if}}
+        <span>Type: {{place.type}}</span> <br/>
+        {{#if place.workTimeInterval.start}}
+            <span>Working time: {{place.workTimeInterval.start}} - {{place.workTimeInterval.end}}</span><br/>
+        {{/if}}
+        {{#if place.rating}}
+            <span>Rating:{{place.rating}}</span> <br/>
+        {{/if}}
+        {{#if place.seatsCapacity}}
+            <span>Seats: {{place.seatsCapacity}}</span> <br/>
+        {{/if}}
         <span>Likes: {{place.userLikedCount}}</span>
     </div>
 
