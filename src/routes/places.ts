@@ -11,11 +11,11 @@ function index(req:express.Request, res:express.Response) {
     let userId = req.session["userId"];
     User.findById(userId, (error, user) => {
         if (error) {
-            res.sendStatus(500);
+            res.sendStatus(400);
         }
         Place.find({_id: {$in: user.places}}, (error, places)=> {
             if (error) {
-                res.send(500);
+                res.sendStatus(400);
             }
 
             res.render('index', {places: places});
@@ -25,28 +25,17 @@ function index(req:express.Request, res:express.Response) {
 
 
 function addGet(req:express.Request, res:express.Response) {
-
     let priceCategories = EnumExtenstion.getNamesAndValues(PriceCategories);
     res.render('add', {priceCategories: priceCategories});
 }
 
 function addPost(req:express.Request, res:express.Response) {
-    let place = new Place();
-    place.name = req.body["name"];
-    place.type = req.body["type"];
-    place.description = req.body["description"];
+    let place = new Place(req.body);
     place.location = req.body["location[]"];
-    place.priceCategory = req.body["priceCategory"];
-    place.workTimeInterval = {
-        start: req.body["workTimeInterval.start"],
-        end: req.body["workTimeInterval.end"]
-    };
-    place.rating = req.body["rating"];
-    place.seatsCapacity = req.body["seatsCapacity"];
 
     place.save((err)=> {
         if (err) {
-            res.sendStatus(500);
+            res.sendStatus(400);
         }
         else {
             res.json({success: true});
@@ -58,9 +47,10 @@ function likePlace(req:express.Request, res:express.Response) {
     let placeId = req.body["placeId"] || req.query.placeId;
     let userId = req.session["userId"];
 
+    //use because findAndModify we cannot deduce that a place has been added to the array
     User.findOne({_id: userId, "places": {$ne: placeId}}, (err, user)=> {
         if (err) {
-            res.sendStatus(500);
+            res.sendStatus(400);
             return;
         }
 
@@ -68,10 +58,11 @@ function likePlace(req:express.Request, res:express.Response) {
             user.places.push(placeId);
             user.save((err)=> {
                 if (err) {
-                    res.sendStatus(500);
+                    res.sendStatus(400);
                     return;
                 }
 
+                //update Places.userLikedCount
                 Place.findByIdAndUpdate(placeId, {$inc: {userLikedCount: +1}}, (err)=> {
                 });
             });
@@ -85,11 +76,10 @@ function unlikePlace(req:express.Request, res:express.Response) {
     let placeId = req.body["placeId"] || req.query.placeId;
     let userId = req.session["userId"];
 
-
-    //use because findAndModify we cannot deduce that a place has been added to the array
+    //use because findAndModify we cannot deduce that a place has been removed from the array
     User.findOne({_id: userId, "places": {$eq: placeId}}, (err, user)=> {
         if (err) {
-            res.sendStatus(500);
+            res.sendStatus(400);
             return;
         }
 
@@ -99,7 +89,7 @@ function unlikePlace(req:express.Request, res:express.Response) {
                 user.places.splice(index, 1);
                 user.save((err)=> {
                     if (err) {
-                        res.sendStatus(500);
+                        res.sendStatus(400);
                         return;
                     }
 
@@ -116,10 +106,9 @@ function unlikePlace(req:express.Request, res:express.Response) {
 
 
 function showAllPlaces(req:express.Request, res:express.Response) {
-
     Place.find({}, {location: true}, (error, places)=> {
             if (error) {
-                res.sendStatus(500);
+                res.sendStatus(400);
                 return;
             }
 
@@ -132,7 +121,7 @@ function showByType(req:express.Request, res:express.Response) {
     let type = req.query.type;
     Place.find({type: type}, {location: true}, (error, places)=> {
             if (error) {
-                res.sendStatus(500);
+                res.sendStatus(400);
                 return;
             }
 
@@ -146,7 +135,7 @@ function showNearestNeighbours(req:express.Request, res:express.Response) {
 
     Place.findById(placeId, (error, place)=> {
             if (error) {
-                res.sendStatus(500);
+                res.sendStatus(400);
                 return;
             }
 
@@ -165,7 +154,7 @@ function showNearestNeighbours(req:express.Request, res:express.Response) {
                 query.limit(6);
                 query.exec((error, places)=> {
                     if (error) {
-                        res.sendStatus(500);
+                        res.sendStatus(400);
                         return;
                     }
                     res.render("showAllPlaces", {places: places, heading: "5 places near to " + place.name});
@@ -182,7 +171,7 @@ function showSimilar(req:express.Request, res:express.Response) {
     let placeId = req.query.placeId;
     Place.findById(placeId, (error, place)=> {
             if (error) {
-                res.sendStatus(500);
+                res.sendStatus(400);
                 return;
             }
 
@@ -192,7 +181,7 @@ function showSimilar(req:express.Request, res:express.Response) {
                 similarQuery.sort({userLikedCount: -1}).limit(10);
                 similarQuery.exec((error, places)=> {
                     if (error) {
-                        res.sendStatus(500);
+                        res.sendStatus(400);
                         return;
                     }
 
@@ -202,18 +191,16 @@ function showSimilar(req:express.Request, res:express.Response) {
                 res.sendStatus(404);
             }
         }
-    )
-    ;
+    );
 }
 
 function getInformationalWindow(req:express.Request, res:express.Response) {
-
     let placeId = req.query.placeId;
     let userId = req.session["userId"];
 
     Place.findById(placeId, (error, place)=> {
         if (error) {
-            res.sendStatus(500);
+            res.sendStatus(400);
             return;
         }
 
@@ -222,7 +209,7 @@ function getInformationalWindow(req:express.Request, res:express.Response) {
             places: {$eq: placeId}
         }, (error, user)=> {
             if (error) {
-                res.sendStatus(500);
+                res.sendStatus(400);
                 return;
             }
 
@@ -259,7 +246,7 @@ function showMostLikedPlacesByType(req:express.Request, res:express.Response) {
     ]).exec(
         (error, groups)=> {
             if (error) {
-                res.sendStatus(500);
+                res.sendStatus(400);
                 return;
             }
 
@@ -267,7 +254,6 @@ function showMostLikedPlacesByType(req:express.Request, res:express.Response) {
         }
     );
 }
-
 
 export {
     index,

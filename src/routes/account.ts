@@ -2,7 +2,6 @@
 
 import * as express from "express";
 import * as crypto from "crypto";
-import * as mongoose from "mongoose";
 
 import config from "../Config";
 import User from "../models/User";
@@ -21,18 +20,16 @@ function signup(req:express.Request, res:express.Response) {
         .digest("base64");
 
     let user = new User({
-        // _id: new mongoose.ObjectID(),
         email: email,
         password: hash
     });
 
     user.save((error, inserted)=> {
         if (error) {
-            res.sendStatus(500);
+            res.sendStatus(400);
             return;
         }
 
-        // req.session["userId"] = inserted.get("_id");
         res.redirect("/");
     });
 }

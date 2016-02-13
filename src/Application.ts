@@ -34,20 +34,6 @@ let bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-function logErrors(err:any, req:express.Request, res:express.Response, next:express.NextFunction) {
-    console.error(err.stack);
-    next(err);
-}
-
-app.use(logErrors);
-
-function errorHandler(err:any, req:express.Request, res:express.Response, next:express.NextFunction) {
-    res.status(500);
-    res.render('error', {error: err});
-}
-
-app.use(errorHandler);
-
 function loggedMiddleware(req:express.Request, res:express.Response, next:express.NextFunction) {
     let userId = req.session["userId"];
     res.locals.isLoggedIn = (userId) ? true : false;
@@ -69,9 +55,9 @@ let authenticatedRoutes = express.Router();
 authenticatedRoutes.use(account.verifySession);
 authenticatedRoutes.get("/", places.index);
 
+authenticatedRoutes.get("/places", places.showAllPlaces);
 authenticatedRoutes.get("/places/add", places.addGet);
 authenticatedRoutes.post("/places/add", places.addPost);
-authenticatedRoutes.get("/places", places.showAllPlaces);
 authenticatedRoutes.get("/places/mostliked", places.showMostLikedPlacesByType)
 authenticatedRoutes.post("/api/places/like", places.likePlace);
 authenticatedRoutes.post("/api/places/unlike", places.unlikePlace);
@@ -83,7 +69,6 @@ authenticatedRoutes.get("/places/nearestNeighbours", places.showNearestNeighbour
 authenticatedRoutes.get("/places/showSimilar", places.showSimilar);
 
 app.use("/", authenticatedRoutes);
-
 
 
 app.listen(3000, () => {

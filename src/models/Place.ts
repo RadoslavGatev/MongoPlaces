@@ -18,14 +18,20 @@ var placeSchema = new mongoose.Schema(
         userLikedCount: {type: Number, default: 0},
         seatsCapacity: Number
     });
+
+//utilized in the similar place search and for retrieving by type
 placeSchema.index({type: 1, priceCategory: 1, userLikedCount: -1});
+
+//utilized in the most liked places
+placeSchema.index({userLikedCount: -1});
+
 
 export interface IPlace extends mongoose.Document {
     name: string;
     location: number[];
     type: string;
-    description: string;
-    workTimeInterval:{start: number, end: number},
+    description?: string;
+    workTimeInterval?:{start: number, end: number},
     rating?: number,
     priceCategory?: PriceCategories,
     userLikedCount: number,

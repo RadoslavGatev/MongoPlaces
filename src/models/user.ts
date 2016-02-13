@@ -5,8 +5,8 @@ import {Schema} from "mongoose";
 
 let userSchema = new mongoose.Schema(
     {
-        email: Schema.Types.String,
-        password: Schema.Types.String,
+        email: {type: Schema.Types.String, required: true},
+        password: {type: Schema.Types.String, required: true},
         places: {
             type: [Schema.Types.ObjectId],
             ref: 'Place'
