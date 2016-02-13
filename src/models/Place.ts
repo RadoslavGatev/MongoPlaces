@@ -18,7 +18,7 @@ var placeSchema = new mongoose.Schema(
         userLikedCount: {type: Number, default: 0},
         seatsCapacity: Number
     });
-placeSchema.index({type: 1, rating: 1, userLikedCount: 1});
+placeSchema.index({type: 1, priceCategory: 1, userLikedCount: -1});
 
 export interface IPlace extends mongoose.Document {
     name: string;
@@ -30,6 +30,7 @@ export interface IPlace extends mongoose.Document {
     priceCategory: PriceCategories,
     userLikedCount: number,
     seatsCapacity: number;
+    isLikedByUser: boolean;
 }
 
 let Place = mongoose.model<IPlace>("Place", placeSchema);

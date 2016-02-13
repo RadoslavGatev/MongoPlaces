@@ -2,27 +2,40 @@
 
 import * as express from "express";
 import * as crypto from "crypto";
+import * as mongoose from "mongoose";
 
 import config from "../Config";
 import User from "../models/User";
 
-// function setup(req:express.Request, res:express.Response) {
-//
-//     // create a sample user
-//     let nick = new User({
-//         name: 'Nick Cerminara',
-//         password: 'password',
-//         // places: []
-//     });
-//
-//     // save the sample user
-//     nick.save(function (err) {
-//         if (err) throw err;
-//
-//         console.log('User saved successfully');
-//         res.json({success: true});
-//     });
-// }
+function signupIndex(req:express.Request, res:express.Response) {
+    res.render('signup');
+}
+
+function signup(req:express.Request, res:express.Response) {
+
+    let email = req.body["email"];
+    let password = req.body["password"];
+
+    const hash = crypto.createHmac('sha256', config.sessionSecret)
+        .update(password)
+        .digest("base64");
+
+    let user = new User({
+        // _id: new mongoose.ObjectID(),
+        email: email,
+        password: hash
+    });
+
+    user.save((error, inserted)=> {
+        if (error) {
+            res.sendStatus(500);
+            return;
+        }
+
+        // req.session["userId"] = inserted.get("_id");
+        res.redirect("/");
+    });
+}
 
 function verifySession(req:express.Request, res:express.Response, next:express.NextFunction) {
     let userId = req.session["userId"];
@@ -75,4 +88,4 @@ function logout(req:express.Request, res:express.Response) {
     });
 }
 
-export {verifySession, login, loginIndex, logout}
+export {signupIndex, signup, verifySession, login, loginIndex, logout}

@@ -58,9 +58,6 @@ function likePlace(req:express.Request, res:express.Response) {
     let placeId = req.body["placeId"] || req.query.placeId;
     let userId = req.session["userId"];
 
-    console.log(placeId);
-
-
     User.findOne({_id: userId, "places": {$ne: placeId}}, (err, user)=> {
         if (err) {
             res.sendStatus(500);
@@ -84,6 +81,39 @@ function likePlace(req:express.Request, res:express.Response) {
     });
 }
 
+function unlikePlace(req:express.Request, res:express.Response) {
+    let placeId = req.body["placeId"] || req.query.placeId;
+    let userId = req.session["userId"];
+
+
+    //use because findAndModify we cannot deduce that a place has been added to the array
+    User.findOne({_id: userId, "places": {$eq: placeId}}, (err, user)=> {
+        if (err) {
+            res.sendStatus(500);
+            return;
+        }
+
+        if (user != null) {
+            var index = user.places.indexOf(placeId);
+            if (index > -1) {
+                user.places.splice(index, 1);
+                user.save((err)=> {
+                    if (err) {
+                        res.sendStatus(500);
+                        return;
+                    }
+
+                    Place.findByIdAndUpdate(placeId, {$inc: {userLikedCount: -1}}, (err)=> {
+                    });
+                });
+            }
+
+        }
+
+        res.sendStatus(200);
+    });
+}
+
 
 function showAllPlaces(req:express.Request, res:express.Response) {
 
@@ -94,7 +124,6 @@ function showAllPlaces(req:express.Request, res:express.Response) {
             }
 
             res.render("showAllPlaces", {places: places});
-
         }
     );
 }
@@ -108,7 +137,6 @@ function showByType(req:express.Request, res:express.Response) {
             }
 
             res.render("showAllPlaces", {places: places});
-
         }
     );
 }
@@ -150,9 +178,39 @@ function showNearestNeighbours(req:express.Request, res:express.Response) {
     );
 }
 
+function showSimiliar(req:express.Request, res:express.Response) {
+    let placeId = req.query.placeId;
+    Place.findById(placeId, {location: true}, (error, place)=> {
+            if (error) {
+                res.sendStatus(500);
+                return;
+            }
+
+            if (place != null) {
+
+                var similiarQuery = Place.find({type: place.type, priceCategory: place.priceCategory}, {location: true});
+
+                similiarQuery.sort({userLikedCount: -1}).limit(10);
+                similiarQuery.exec((error, places)=> {
+                    if (error) {
+                        res.sendStatus(500);
+                        return;
+                    }
+
+                    res.render("showAllPlaces", {places: places});
+                });
+            } else {
+                res.sendStatus(404);
+            }
+        }
+    )
+    ;
+}
+
 function getInformationalWindow(req:express.Request, res:express.Response) {
 
     let placeId = req.query.placeId;
+    let userId = req.session["userId"];
 
     Place.findById(placeId, (error, place)=> {
         if (error) {
@@ -160,11 +218,39 @@ function getInformationalWindow(req:express.Request, res:express.Response) {
             return;
         }
 
-        res.render("informationWindow", {layout: null, place: place});
+        User.find({
+            _id: userId,
+            places: {$eq: placeId}
+        }, (error, user)=> {
+            if (error) {
+                res.sendStatus(500);
+                return;
+            }
+            
+            if (user.length != 0) {
+                place.isLikedByUser = true;
+            }
+            else {
+                place.isLikedByUser = false;
+            }
+
+            res.render("informationWindow", {layout: null, place: place});
+        });
     });
 
 }
 
 
-export {index, addGet, addPost, likePlace, showAllPlaces, showByType, showNearestNeighbours, getInformationalWindow}
+export {
+    index,
+    addGet,
+    addPost,
+    likePlace,
+    unlikePlace,
+    showAllPlaces,
+    showByType,
+    showNearestNeighbours,
+    showSimiliar,
+    getInformationalWindow
+}
 

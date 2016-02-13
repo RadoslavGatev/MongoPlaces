@@ -1,3 +1,13 @@
+<style>
+    .like-button:not(.active) {
+        display: none;
+    }
+</style>
+
+<div class="clearfix" style="margin-bottom: 5px;">
+    <a href="/places/add" class="btn btn-info pull-right" role="button"><i class="fa fa-plus"></i>Add new place</a>
+</div>
+
 
 <div class="map"></div>
 
@@ -32,6 +42,15 @@
                     infowindow.open(map, marker);
                 });
 
+            });
+        });
+
+        $("body").on("click", ".like-button", function (e) {
+            e.preventDefault();
+            var self = this;
+            $.post(this.href, function () {
+                $(self).removeClass("active");
+                $(".like-button").not(self).addClass("active");
             });
         });
     });

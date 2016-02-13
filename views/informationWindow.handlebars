@@ -5,7 +5,16 @@
 
 <div class="tab-content" style="min-height: 100px;">
     <div id="info" class="tab-pane fade in active">
-        <h3>{{place.name}}</h3>
+        <h3>{{place.name}}
+            <a type="button" href="/api/places/like?placeId={{place._id}}"
+               class="btn btn-success like-button {{#unless place.isLikedByUser}}active{{/unless}}">
+                <i class="fa fa-heart-o"></i>Like
+            </a>
+            <a type="button" href="/api/places/unlike?placeId={{place._id}}"
+               class="btn btn-success like-button {{#if place.isLikedByUser}}active{{/if}}">
+                <i class="fa fa-heart"></i>Liked
+            </a>
+        </h3>
         <p>{{place.description}}</p>
 
         <span>Type: {{place.type}}</span>
@@ -16,8 +25,8 @@
     </div>
 
     <div id="links" class="tab-pane fade in">
-        <a href="/places/byType?type={{place.type}}" target="_blank">View all places of this type</a>
-        <a href="/places/nearestNeighbours?placeId={{place._id}}" target="_blank">View all the 5 nearby places</a>
-
+        <a href="/places/byType?type={{place.type}}" target="_blank">View all places of this type</a><br/>
+        <a href="/places/nearestNeighbours?placeId={{place._id}}" target="_blank">View all the 5 nearby places</a><br/>
+        <a href="/places/showSimiliar?placeId={{place._id}}" target="_blank">Show similiar places</a><br/>
     </div>
 </div>

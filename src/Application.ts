@@ -50,8 +50,20 @@ function errorHandler(err:any, req:express.Request, res:express.Response, next:e
 
 app.use(errorHandler);
 
+function loggedMiddleware(req:express.Request, res:express.Response, next:express.NextFunction) {
+    let userId = req.session["userId"];
+    res.locals.isLoggedIn = (userId) ? true : false;
+
+    // keep executing the router middleware
+    next();
+}
+app.use(loggedMiddleware);
+
 app.get("/login", account.loginIndex);
 app.post("/login", account.login);
+
+app.get("/signup", account.signupIndex);
+app.post("/signup", account.signup);
 
 app.get("/logout", account.logout);
 
@@ -63,14 +75,18 @@ authenticatedRoutes.get("/maps", maps.index);
 authenticatedRoutes.get("/places/add", places.addGet);
 authenticatedRoutes.post("/places/add", places.addPost);
 authenticatedRoutes.get("/places", places.showAllPlaces);
-authenticatedRoutes.get("/places/like", places.likePlace);
+authenticatedRoutes.post("/api/places/like", places.likePlace);
+authenticatedRoutes.post("/api/places/unlike", places.unlikePlace);
+
 authenticatedRoutes.get("/places/info", places.getInformationalWindow);
 
 authenticatedRoutes.get("/places/byType", places.showByType);
 authenticatedRoutes.get("/places/nearestNeighbours", places.showNearestNeighbours);
-
+authenticatedRoutes.get("/places/showSimiliar", places.showSimiliar);
 
 app.use("/", authenticatedRoutes);
+
+
 
 app.listen(3000, () => {
     console.log("Example app listening on port 3000!");
