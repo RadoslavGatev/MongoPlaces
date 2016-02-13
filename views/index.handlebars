@@ -1,58 +1,32 @@
 <h2>User's favourite places</h2>
-<table>
+
+<table class="table table-hover">
     <thead>
-    <th>
-        name
-    </th>
-    <th>
-        location
-    </th>
-    <th>
-        type
-    </th>
-    <th>
-        description
-    </th>
-    <th>
-        workTimeInterval
-    </th>
-    <th>
-        rating
-    </th>
-    <th>
-        userLikedCount
-    </th>
-    <th>
-        placesCount
-    </th>
+    <tr>
+        <th></th>
+        <th>Name</th>
+        <th>type</th>
+        <th>Rating</th>
+        <th>Likes</th>
+    </tr>
     </thead>
     <tbody>
     {{#places}}
         <tr>
             <td>
-                {{name}}
+                <a type="button" href="/api/places/like?placeId={{_id}}"
+                   class="btn btn-success like-button">
+                    <i class="fa fa-heart-o"></i>Like
+                </a>
+                <a type="button" href="/api/places/unlike?placeId={{_id}}"
+                   class="btn btn-success like-button active">
+                    <i class="fa fa-heart"></i>Liked
+                </a>
             </td>
-            <td>
-                {{location}}
-            </td>
-            <td>
-                {{type}}
-            </td>
-            <td>
-                {{description}}
-            </td>
-            <td>
-                {{workTimeInterval.start}}-{{workTimeInterval.end}}
-            </td>
-            <td>
-                {{rating}}
-            </td>
-            <td>
-                {{userLikedCount}}
-            </td>
-            <td>
-                {{placesCount}}
-            </td>
+            <td>{{name}}</td>
+            <td>{{type}}</td>
+            <td>{{rating}}</td>
+            <td>{{userLikedCount}}</td>
         </tr>
     {{/places}}
     </tbody>

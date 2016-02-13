@@ -1,0 +1,19 @@
+{{#each groups}}
+    <h2>{{_id}}</h2>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Users liked</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each places}}
+            <tr>
+                <td>{{name}}</td>
+                <td>{{userLikedCount}}</td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+{{/each}}

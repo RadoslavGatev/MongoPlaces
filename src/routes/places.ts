@@ -236,7 +236,36 @@ function getInformationalWindow(req:express.Request, res:express.Response) {
             res.render("informationWindow", {layout: null, place: place});
         });
     });
+}
 
+function showMostLikedPlacesByType(req:express.Request, res:express.Response) {
+    Place.aggregate([
+        {
+            $sort: {userLikedCount: -1}
+        },
+        {
+            $group: {
+                _id: "$type",
+                places: {
+                    $push: {_id: "$_id", name: "$name", userLikedCount: "$userLikedCount"}
+                }
+            }
+        },
+        {
+            $sort: {
+                "places.userLikedCount": -1
+            }
+        }
+    ]).exec(
+        (error, groups)=> {
+            if (error) {
+                res.sendStatus(500);
+                return;
+            }
+
+            res.render("showMostLikedPlacesByType", {groups: groups});
+        }
+    );
 }
 
 
@@ -250,6 +279,7 @@ export {
     showByType,
     showNearestNeighbours,
     showSimiliar,
-    getInformationalWindow
+    getInformationalWindow,
+    showMostLikedPlacesByType
 }
 

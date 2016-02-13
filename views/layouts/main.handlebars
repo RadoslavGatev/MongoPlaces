@@ -44,6 +44,10 @@
         .fa {
             margin-right: 7px;
         }
+
+        .like-button:not(.active) {
+            display: none;
+        }
     </style>
 </head>
 
@@ -65,7 +69,7 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/">Home</a></li>
                 <li><a href="/places">All places</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="/places/mostliked">The most liked</a></li>
             </ul>
             {{#if isLoggedIn}}
                 <ul class="nav navbar-nav navbar-right">
@@ -98,6 +102,16 @@
         integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A=="
         crossorigin="anonymous"></script>
 <script src="https://maps.googleapis.com/maps/api/js"></script>
+<script>
+    $("body").on("click", ".like-button", function (e) {
+        e.preventDefault();
+        var self = this;
+        $.post(this.href, function () {
+            $(self).removeClass("active");
+            $(".like-button").not(self).addClass("active");
+        });
+    });
+</script>
 </body>
 </html>
 

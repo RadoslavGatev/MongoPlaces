@@ -3,8 +3,6 @@
 import * as express from "express";
 import * as mongoose from "mongoose";
 
-import * as routes from "./routes/index";
-import * as maps from "./routes/maps";
 import * as places from "./routes/places";
 import * as account from "./routes/account";
 
@@ -70,11 +68,11 @@ app.get("/logout", account.logout);
 let authenticatedRoutes = express.Router();
 authenticatedRoutes.use(account.verifySession);
 authenticatedRoutes.get("/", places.index);
-authenticatedRoutes.get("/maps", maps.index);
 
 authenticatedRoutes.get("/places/add", places.addGet);
 authenticatedRoutes.post("/places/add", places.addPost);
 authenticatedRoutes.get("/places", places.showAllPlaces);
+authenticatedRoutes.get("/places/mostliked", places.showMostLikedPlacesByType)
 authenticatedRoutes.post("/api/places/like", places.likePlace);
 authenticatedRoutes.post("/api/places/unlike", places.unlikePlace);
 
