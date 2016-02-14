@@ -237,11 +237,6 @@ function showMostLikedPlacesByType(req:express.Request, res:express.Response) {
                     $push: {_id: "$_id", name: "$name", userLikedCount: "$userLikedCount"}
                 }
             }
-        },
-        {
-            $sort: {
-                "places.userLikedCount": -1
-            }
         }
     ]).exec(
         (error, groups)=> {
